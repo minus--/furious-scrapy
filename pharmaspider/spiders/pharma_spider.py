@@ -11,12 +11,10 @@ class PharmaSpider(scrapy.Spider):
         url = response.xpath('//form[@name="form_gd_public"]/@action').extract()
         form_name = response.xpath('//form[@name="form_gd_public"]/@name').extract()
         form_id = response.xpath('//form[@name="form_gd_public"]/@id').extract()
-
         drug_id = response.xpath('//form[@name="form_gd_public"]//select[@id="dci"]/option/@value').extract()
         drug_name = response.xpath('//form[@name="form_gd_public"]//select[@id="dci"]/option/text()').extract()
         drug_dict = zip(drug_id, drug_name)
-        for key,value in drug_dict[0:1]:
-            print(value)
+        for key,value in drug_dict:
             yield scrapy.FormRequest.from_response(
                 response,
                 formname = 'form_gd_public',
@@ -40,7 +38,6 @@ class PharmaSpider(scrapy.Spider):
         drug = DrugItem()
         name = response.xpath('//font/text()').extract()
         drug['name'] = name[0]
-
         drug_label = []
         drug_value = []
         titles = response.xpath('//table//th')
